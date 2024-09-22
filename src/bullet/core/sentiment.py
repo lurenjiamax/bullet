@@ -29,6 +29,8 @@ class SentimentClassifier(BaseModel):
     provider: str = "openai"
     """Large Language Model (LLM) provider. Currently supported values: openai"""
 
+    base_url: str = "https://api.openai.com/v1"
+
     model: str = "gpt-3.5-turbo-instruct"
     """Large Language Model (LLM) identification. Currently supported values: gpt-3.5-turbo-instruct"""
 
@@ -49,7 +51,8 @@ class SentimentClassifier(BaseModel):
 
         if self.api_key == "":
             self.api_key = os.environ["OPENAI_API_KEY"]
-        self.base_url = os.environ['OPENAI_API_BASE']
+        if os.environ['OPENAI_API_BASE']:
+            self.base_url = os.environ['OPENAI_API_BASE']
 
         self.encoding = tiktoken.encoding_for_model(self.model)
         if self.provider != "openai" or self.model != "gpt-3.5-turbo-instruct":
