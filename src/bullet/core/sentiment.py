@@ -49,6 +49,7 @@ class SentimentClassifier(BaseModel):
 
         if self.api_key == "":
             self.api_key = os.environ["OPENAI_API_KEY"]
+        self.base_url = os.environ['OPENAI_API_BASE']
 
         self.encoding = tiktoken.encoding_for_model(self.model)
         if self.provider != "openai" or self.model != "gpt-3.5-turbo-instruct":
@@ -60,7 +61,7 @@ class SentimentClassifier(BaseModel):
     @property
     def api(self) -> int:
         """Instantiates and returns an OpenAI client object."""
-        client = OpenAI(api_key=self.api_key)
+        client = OpenAI(api_key=self.api_key,base_url=self.base_url)
         client.timeout = 2
 
         return client
